@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <title>Tam Ekran Slider ve Navbar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.rawgit.com/michalsnik/aos/2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+    <script src="https://cdn.rawgit.com/michalsnik/aos/2.3.1/dist/aos.js"></script>
+
+    <style>
+        body,
+        html {
+            margin: 20;
+            padding: 20;
+        }
+
+        .carousel-inner img {
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .navbar {
+            z-index: 2;
+        }
+
+        .contact-form {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            z-index: 2;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 50%;
+            width: 300px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 10px 2px grey;
+        }
+
+        .contact-form h4 {
+            margin-bottom: 20px;
+        }
+
+        .contact-form .form-control {
+            margin-bottom: 10px;
+        }
+
+        .slider-container {
+            position: absolute;
+            top: 70%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            text-align: left;
+        }
+
+        .slider-container h1,
+        .slider-container h4 {
+            color: white;
+        }
+
+        .slider-container button {
+            border-radius: 25px;
+            background-color: blue;
+            color: white;
+        }
+
+        /*
+*
+* ==========================================
+* CUSTOM UTIL CLASSES
+* ==========================================
+*/
+        .nav-pills-custom .nav-link {
+            color: #aaa;
+            background: #fff;
+            position: relative;
+        }
+
+        .nav-pills-custom .nav-link.active {
+            color: #457ab6;
+            background: #fff;
+        }
+
+
+        /* Add indicator arrow for the active tab */
+        @media (min-width: 992px) {
+            .nav-pills-custom .nav-link::before {
+                content: '';
+                display: block;
+                border-top: 8px solid transparent;
+                border-left: 10px solid #fff;
+                border-bottom: 8px solid transparent;
+                position: absolute;
+                top: 50%;
+                right: -10px;
+                transform: translateY(-50%);
+                opacity: 0;
+            }
+        }
+
+        .nav-pills-custom .nav-link.active::before {
+            opacity: 1;
+        }
+
+
+
+
+
+        /*
+*
+* ==========================================
+* FOR DEMO PURPOSE
+* ==========================================
+*/
+        body {
+            min-height: 100vh;
+            background: linear-gradient(to left, #5bc3e3, #457ab6);
+        }
+
+        .custom-container {
+            background-color: rgba(220, 220, 220, 0.5);
+            width: 500px;
+            height: auto;
+            /* Yüksekliği otomatik ayarladım içeriğe göre */
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            /* kutular arası boşluk için */
+        }
+
+        .custom-container .header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .custom-container .content {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .bi-chat-square-text {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .right-panel {
+            position: fixed;
+            top: 130px;
+            right: 250px;
+
+        }
+
+        .custom-container {
+            background-color: rgba(220, 220, 220, 0.5);
+            width: 400px;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .custom-container .header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .custom-container .content {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        .bi-chat-square-text {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .button-container button {
+            flex: 1;
+            margin: 0 10px;
+            padding: 10px;
+        }
+
+        .google-logo {
+            display: block;
+            margin: 0px auto;
+            /* Merkeze almak için */
+            width: 200px;
+            height: 100px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/8d/Google_logo_%282010-2013%29.svg');
+            /* Önceki adımda belirttiğimiz dosya yolu */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .container1 {
+            width: 1200px;
+            height: 180px;
+            background-image: url('https://img.freepik.com/free-photo/man-getting-hair-loss-treatment_23-2149152756.jpg?w=1380&h=776&t=st=1693245832~exp=1693246432~hmac=10c12cdacd8410230b6d5ef70eaae83483ff9a7e6dce73103d8221701177934b');
+            margin: 0 auto;
+            /* Yatayda ortalar */
+            position: absolute;
+            top: 150%;
+            /* Dikeyde ortalar */
+            left: 50%;
+            /* Yatayda ortalar */
+            transform: translate(-50%, -50%);
+            /* Hem yatayda hem de dikeyde tam ortalamak için */
+            padding-top: 40px;
+            text-align: center;
+            overflow: visible;
+        }
+
+        .container1 h2,
+        .container1 h3 {
+            margin: -40px 0;
+            padding: 20px;
+            color: white;
+            /* Arka plan resminin üzerinde görünmeleri için */
+        }
+
+        .gender-buttons {
+            position: absolute;
+            width: 100%;
+            bottom: -40px;
+            /* Yarısı containerin dışında olacak şekilde yerleştirir */
+            text-align: center;
+        }
+
+        .gender-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            /* Daire şekli */
+            border: none;
+            background-color: rgb(60, 145, 201);
+            cursor: pointer;
+            margin: 0 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .gender-btn.female:active,
+        .gender-btn.female:focus,
+        .gender-btn.male:active,
+        .gender-btn.male:focus {
+            background-color: rgb(14, 64, 129);
+        }
+
+        .select-btn {
+            position: absolute;
+            bottom: -110px;
+            /* Daire butonların 20px altında */
+            left: 50%;
+            transform: translateX(-50%);
+            /* Ortalamak için */
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+
+        .custom-design {
+            margin-top: 70vh;
+            /* Bu değeri ekranın yarısına denk gelen bir boşluk olarak ayarladık. */
+        }
+
+        .custom-design .photo-container img {
+            width: 45%;
+            margin: 1% 2%;
+        }
+
+        .custom-design .custom-button {
+            margin-top: 5vh;
+            padding: 10px 30px;
+        }
+
+        .custom-design p {
+            margin-bottom: 15px;
+            padding: 0 15px;
+            text-align: center;
+        }
+
+        /* Tabs*/
+        section {
+            padding: 60px 0;
+        }
+
+        section .section-title {
+            text-align: center;
+            color: #00407b;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+        }
+
+        #tabs {
+            background: #0e4792;
+            color: #eee;
+        }
+
+        #tabs h6.section-title {
+            color: #eee;
+        }
+
+        #tabs .nav-tabs .nav-item.show .nav-link,
+        .nav-tabs .nav-link.active {
+            color: #f3f3f3;
+            background-color: transparent;
+            border-color: transparent transparent #f3f3f3;
+            border-bottom: 4px solid !important;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #tabs .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: .25rem;
+            border-top-right-radius: .25rem;
+            color: #eee;
+            font-size: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .custom-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-orange {
+            background-color: #FFA500;
+            /* Turuncu renk */
+        }
+
+        .btn-orange:hover {
+            background-color: #FF8C00;
+            /* Turuncunun koyu tonu */
+        }
+
+        .btn-blue {
+            background-color: #1E90FF;
+            /* Mavi renk */
+        }
+
+        .btn-blue:hover {
+            background-color: #187bcd;
+            /* Mavinin koyu tonu */
+        }
+
+        a {
+            color: black;
+        }
+
+        a:hover {
+            color: #007bff;
+            /* Örnek mavi rengi, dilediğiniz bir renge değiştirebilirsiniz */
+        }
+
+        i.fa-twitter,
+        i.fa-facebook-f,
+        i.fa-instagram {
+            font-size: 24px;
+        }
+
+        .transparent-box {
+            background-color: rgba(255, 255, 255, 0.6);
+            /* Yarı şeffaf beyaz */
+            border-radius: 15px;
+            /* Köşeleri yumuşatmak için */
+        }
+
+        .btn-warning {
+            background-color: #ff8800;
+        }
+
+        .stepper-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: rgba(245, 222, 179, 0.6);
+            /* Transparan Bej */
+            padding: 20px;
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            transition: background-color 0.3s ease;
+            margin: 20px;
+        }
+
+        .stepper-item:hover {
+            background-color: rgba(222, 184, 135, 0.9);
+            /* Koyu Bej */
+        }
+
+        .stepper-item .icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .last-stepper {
+            background-color: gray;
+        }
+
+        .last-stepper:hover {
+            background-color: darkgray;
+        }
+
+        .service-title,
+        .service-subtitle {
+            margin-bottom: 25px;
+        }
+
+        .carousel-inner12 {
+            background-color: rgba(245, 222, 179, 0.6);
+            /* Transparan Bej */
+            padding: 20px;
+            border-radius: 15px;
+            height: 450px;
+            border: 1px solid #ccc;
+
+
+            /* Gölgeleme için aşağıdaki stil satırını ekliyoruz */
+            box-shadow: 0px 50px 77px rgba(180, 20, 20, 0.1);
+        }
+
+        .cslide-content {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            /* Sol tarafa hizalama */
+            padding-left: 20px;
+            /* Sol tarafa biraz boşluk ekleyelim */
+            height: 400px;
+            /* Bu değeri ayarlayabilirsiniz */
+        }
+
+        .cprofile-image {
+            border-radius: 50%;
+            width: 20%;
+            /* Genişlik ve yüksekliği aynı tutarak daire şekli elde ediyoruz */
+            height: 20%;
+            object-fit: cover;
+            margin-bottom: 40px;
+        }
+
+        .ccontact-btn {
+            margin-top: 20px;
+        }
+
+        .cvideo-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        iframe {
+            width: 100%;
+            height: 300px;
+            /* Bu değeri ayarlayabilirsiniz */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="section" id="section1">
+
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <a class="navbar-brand" href="#">Logo</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Hakkımızda</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Ürünler</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">İletişim</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary">TR</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="btn btn-primary">Bize Ulaşın</button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!-- Yuvarlak İletişim Kutusu -->
+        <div class="contact-form">
+            <h4 class="text-center">Doktora Sorun</h4>
+            <input type="text" class="form-control mt-3" placeholder="Adınız">
+            <input type="text" class="form-control mt-3" placeholder="E-posta">
+            <button class="btn btn-primary mt-3">Bize Ulaşın</button>
+        </div>
+        <!-- Slider -->
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+            <div class="container slider-container">
+                <h1>Saç Ekim Analizi</h1>
+                <h4>Doktor ile görüş</h4>
+                <button class="btn btn-primary rounded">Devamını İnceleyin</button>
+            </div>
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="https://img.freepik.com/free-photo/man-getting-hair-loss-treatment_23-2149152756.jpg?w=1380&h=776&t=st=1693245832~exp=1693246432~hmac=10c12cdacd8410230b6d5ef70eaae83483ff9a7e6dce73103d8221701177934b"
+                            class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://img.freepik.com/free-photo/mature-man-having-balding-problems_23-2149152739.jpg?w=1380&h=776&t=st=1693245776~exp=1693246376~hmac=15836ea30f64f8bab5e66812c2606a45601b7ccf81a0fd23610c65651e46903b"
+                            class="d-block w-100" alt="...">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="https://img.freepik.com/free-photo/mature-man-having-balding-problems_23-2149152802.jpg?w=1380&h=776&t=st=1693245830~exp=1693246430~hmac=e87dcba6725cf7be078e40d9a30ffb0fabfa37264798efccf387ce38020999f0"
+                            class="d-block w-100" alt="...">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Önceki</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Sonraki</span>
+                </a>
+            </div>
+
+        </div>
+        <!-- Demo header-->
+        <section class="py-5 header">
+            <div class="container py-4" data-aos="fade-up">
+
+
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <!-- Tabs nav -->
+                        <div class="nav flex-column nav-pills nav-pills-custom" id="v-pills-tab" role="tablist"
+                            aria-orientation="vertical">
+                            <a class="nav-link mb-3 p-3 shadow active" id="v-pills-home-tab" data-toggle="pill"
+                                href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                                <i class="fa fa-user-circle-o mr-2"></i>
+                                <span class="font-weight-bold small text-uppercase">Saç Ektirilir</span></a>
+
+                            <a class="nav-link mb-3 p-3 shadow" id="v-pills-profile-tab" data-toggle="pill"
+                                href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
+                                aria-selected="false">
+                                <i class="fa fa-calendar-minus-o mr-2"></i>
+                                <span class="font-weight-bold small text-uppercase">Rezervuar yapılır</span></a>
+
+                            <a class="nav-link mb-3 p-3 shadow" id="v-pills-messages-tab" data-toggle="pill"
+                                href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
+                                aria-selected="false">
+                                <i class="fa fa-star mr-2"></i>
+                                <span class="font-weight-bold small text-uppercase">Yorumlar</span></a>
+
+                            <a class="nav-link mb-3 p-3 shadow" id="v-pills-settings-tab" data-toggle="pill"
+                                href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
+                                aria-selected="false">
+                                <i class="fa fa-check mr-2"></i>
+                                <span class="font-weight-bold small text-uppercase">Saçınız ekildi</span></a>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-9">
+                        <!-- Tabs content -->
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade shadow rounded bg-white show active p-5" id="v-pills-home"
+                                role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                <h4 class="font-italic mb-4">Personal information</h4>
+                                <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </div>
+
+                            <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-profile" role="tabpanel"
+                                aria-labelledby="v-pills-profile-tab">
+                                <h4 class="font-italic mb-4">Bookings</h4>
+                                <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </div>
+
+                            <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-messages" role="tabpanel"
+                                aria-labelledby="v-pills-messages-tab">
+                                <h4 class="font-italic mb-4">Reviews</h4>
+                                <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </div>
+
+                            <div class="tab-pane fade shadow rounded bg-white p-5" id="v-pills-settings" role="tabpanel"
+                                aria-labelledby="v-pills-settings-tab">
+                                <h4 class="font-italic mb-4">Confirm booking</h4>
+                                <p class="font-italic text-muted mb-2">Lorem ipsum dolor sit amet, consectetur
+                                    adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                                    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="section" id="section7" data-aos="fade-up">
+            <section>
+                <div class="container mt-5">
+
+                    <div class="custom-container">
+                        <div class="header">
+                            <h5>İSMAİL Y1</h5>
+                            <small class="text-muted">Tarih</small>
+                        </div>
+                        <div class="content">
+                            <i class="bi bi-chat-square-text"></i>
+                            <span>Burası yorum kısmı.</span>
+                        </div>
+                    </div>
+
+                    <div class="custom-container">
+                        <div class="header">
+                            <h5>İSMAİL Y1</h5>
+                            <small class="text-muted">Tarih</small>
+                        </div>
+                        <div class="content">
+                            <i class="bi bi-chat-square-text"></i>
+                            <span>Burası yorum kısmı.</span>
+                        </div>
+                    </div>
+
+                    <div class="custom-container">
+                        <div class="header">
+                            <h5>İSMAİL Y1</h5>
+                            <small class="text-muted">Tarih</small>
+                        </div>
+                        <div class="content">
+                            <i class="bi bi-chat-square-text"></i>
+                            <span>Burası yorum kısmı.</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="right-panel">
+                    <h3>saç ekimi yaptıran müşterilerimizin</h3>
+                    <h2>GÖRÜŞLERİNİ OKUYUN</h2>
+                    <div class="button-container">
+                        <button class="btn btn-primary">sizde yorum yapın</button>
+                        <button class="btn btn-secondary">Tümünü okuyun</button>
+                    </div>
+                    <div class="google-logo"></div>
+                </div>
+            </section>
+            <section>
+                <div class="container1">
+                    <h2>SAÇ ANALİZİ</h2>
+                    <h3>Saç analizi için cinsiyet seçerek başlayınız</h3>
+                    <div class="gender-buttons">
+                        <button class="gender-btn female"><i class="female-icon">♀️</i></button>
+                        <button class="gender-btn male"><i class="male-icon">♂️</i></button>
+                    </div>
+                    <button class="select-btn">SEÇ ve Devam Et</button>
+                </div>
+
+            </section>
+
+
+
+
+
+
+        </div>
+        <section>
+            <div class="container-fluid custom-design" data-aos="fade-up">
+                <div class="row h-100">
+                    <!-- Fotoğraflar için Sol Bölüm -->
+                    <div class="col-md-6 d-flex justify-content-center align-items-center">
+                        <div class="photo-container">
+                            <img src="https://img.freepik.com/free-photo/mature-man-having-balding-problems_23-2149152802.jpg?w=1380&h=776&t=st=1693245830~exp=1693246430~hmac=e87dcba6725cf7be078e40d9a30ffb0fabfa37264798efccf387ce38020999f0"
+                                alt="Fotoğraf 1" class="mb-3">
+                            <img src="https://img.freepik.com/free-photo/mature-man-having-balding-problems_23-2149152802.jpg?w=1380&h=776&t=st=1693245830~exp=1693246430~hmac=e87dcba6725cf7be078e40d9a30ffb0fabfa37264798efccf387ce38020999f0"
+                                alt="Fotoğraf 2" class="mb-3">
+                            <img src="https://img.freepik.com/free-photo/mature-man-having-balding-problems_23-2149152802.jpg?w=1380&h=776&t=st=1693245830~exp=1693246430~hmac=e87dcba6725cf7be078e40d9a30ffb0fabfa37264798efccf387ce38020999f0"
+                                alt="Fotoğraf 3">
+                            <img src="https://img.freepik.com/free-photo/mature-man-having-balding-problems_23-2149152802.jpg?w=1380&h=776&t=st=1693245830~exp=1693246430~hmac=e87dcba6725cf7be078e40d9a30ffb0fabfa37264798efccf387ce38020999f0"
+                                alt="Fotoğraf 4">
+                        </div>
+                    </div>
+
+                    <!-- Paragraflar ve Buton için Sağ Bölüm -->
+                    <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
+                        <h3>Lorem ipsum dolor sit amet consectetur adipisicing elit.</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur
+                            adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur
+                            adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                            ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
+                            esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        <button class="btn btn-primary custom-button">Detay</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <section>
+            <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+                id="bootstrap-css">
+            <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+            <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+            <!------ Include the above in your HEAD tag ---------->
+
+            <!-- Tabs -->
+            <section id="tabs">
+                <div class="container" data-aos="fade-up">
+                    <h6 class="section-title h1">Tabs</h6>
+                    <div class="row">
+                        <div class="col-xs-12 ">
+                            <nav>
+                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab"
+                                        href="#nav-home" role="tab" aria-controls="nav-home"
+                                        aria-selected="true">Home</a>
+                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab"
+                                        href="#nav-profile" role="tab" aria-controls="nav-profile"
+                                        aria-selected="false">Profile</a>
+                                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab"
+                                        href="#nav-contact" role="tab" aria-controls="nav-contact"
+                                        aria-selected="false">Contact</a>
+                                    <a class="nav-item nav-link" id="nav-about-tab" data-toggle="tab" href="#nav-about"
+                                        role="tab" aria-controls="nav-about" aria-selected="false">About</a>
+                                </div>
+                            </nav>
+                            <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel"
+                                    aria-labelledby="nav-home-tab">
+                                    Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat
+                                    qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam
+                                    sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure
+                                    incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do
+                                    nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit.
+                                    Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore.
+                                    Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                                </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel"
+                                    aria-labelledby="nav-profile-tab">
+                                    Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat
+                                    qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam
+                                    sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure
+                                    incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do
+                                    nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit.
+                                    Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore.
+                                    Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                                </div>
+                                <div class="tab-pane fade" id="nav-contact" role="tabpanel"
+                                    aria-labelledby="nav-contact-tab">
+                                    Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat
+                                    qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam
+                                    sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure
+                                    incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do
+                                    nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit.
+                                    Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore.
+                                    Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                                </div>
+                                <div class="tab-pane fade" id="nav-about" role="tabpanel"
+                                    aria-labelledby="nav-about-tab">
+                                    Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat
+                                    qui minim occaecat veniam. Fugiat veniam incididunt anim aliqua enim pariatur veniam
+                                    sunt est aute sit dolor anim. Velit non irure adipisicing aliqua ullamco irure
+                                    incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet duis do
+                                    nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit.
+                                    Exercitation mollit sit culpa nisi culpa non adipisicing reprehenderit do dolore.
+                                    Duis reprehenderit occaecat anim ullamco ad duis occaecat ex.
+                                </div>
+                            </div>
+                            <div class="button-group">
+                                <button class="btn custom-btn btn-orange">İLETİŞİME GEÇİN</button>
+                                <button class="btn custom-btn btn-blue">DETAYLI BİLGİ</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ./Tabs -->
+        </section>
+        <section>
+            <div class="container-fluid mt-5">
+                <div class="row">
+                    <!-- Sol Üst Resim -->
+                    <div class="col-md-6">
+                        <img src="https://yt3.googleusercontent.com/XNgk1Qnji_n7k37OwrbPHzRBGTJoS9yCEkSCfrtoGC-PdBIk6BVZWJP-cVCacZi49_BY2kPCjw=s900-c-k-c0x00ffffff-no-rj"
+                            alt="Bir Resim" class="img-fluid" />
+                    </div>
+
+                    <!-- Sağ Alt Paragraf ve Sosyal Medya İkonları -->
+                    <div class="col-md-6 d-flex flex-column justify-content-end">
+                        <!-- Transparan Beyaz Kutu -->
+                        <div class="transparent-box p-4 mb-4">
+                            <h2>LONG HAİR CENTER</h2>
+                            <p> Here at the Long Hair Center, under the ownership of Dr. Ahmet Yildirim, we are
+                                committed to
+                                providing you with 100% customer satisfaction and global quality treatments. Our
+                                services
+                                are delivered to the highest level of perfection with personalized, first-rate care
+                                tailored
+                                to meet your individual needs. Leave your wandering, nervous thoughts behind and
+                                experience
+                                your desired natural results with confidence. This is our assurance to our valued
+                                clientele.
+                                We provide the best possible services to our patients, with our undivided attention
+                                focused
+                                on meeting your personal preferences.</p>
+                            <p>
+                                At the Long Hair Center, we do not offer nor accept more than two surgeries per day.
+                                In rare
+                                cases, this number may increase to a maximum of three to four surgeries if the third
+                                or
+                                fourth patient requires less than 2000 hair grafts in their bald area. This work
+                                ethic has
+                                allowed us to establish a unique reputation in the Turkish hair transplant sector.
+                                With over
+                                13 years of medical expertise, we offer a vast range of advanced, top-notch
+                                technological
+                                services to provide you with the ideal look and results you desire.
+
+
+
+                            </p>
+                            <!-- Sosyal Medya İkonları -->
+                            <div class="mb-3">
+                                <a href="#" class="mr-2"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="mr-2"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Buton -->
+                        <div class="mb-4">
+                            <button class="btn btn-warning w-100">Detaylı İnceleyin</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <section>
+            <div class="container mt-5 text-center" data-aos="fade-up">
+                <h1 class="service-title">SERVİS HİZMETLERİMİZ</h1>
+                <h4 class="service-subtitle">Transferlerinizden konaklamanıza detaylı hizmet</h4>
+                <div class="row">
+                    <div class="col stepper-item">
+                        <div class="icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <p>Bize Ulaşın</p>
+                    </div>
+                    <div class="col stepper-item">
+                        <div class="icon">
+                            <i class="fas fa-hotel"></i>
+                        </div>
+                        <p>Otel</p>
+                    </div>
+                    <div class="col stepper-item">
+                        <div class="icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <p>Transfer</p>
+                    </div>
+                    <div class="col stepper-item">
+                        <div class="icon">
+                            <i class="fas fa-hospital"></i>
+                        </div>
+                        <p>Hastane</p>
+                    </div>
+                    <div class="col stepper-item last-stepper">
+                        <div class="icon">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <p>Kültür Turları</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+
+        <section>
+            <div class="container mt-5">
+                <div id="customizedCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner12">
+                        <!-- First Slide -->
+                        <div class="carousel-item active">
+                            <div class="row">
+                                <div class="col-md-6 cslide-content">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwVRR689h-rJJsTMJbY7w4zLP30xxYflNRy6HM164ZjtcJHhgL8su7kCJgBLqdJOx_2D4&usqp=CAU"
+                                        alt="Profile Image" class="cprofile-image">
+                                    <p>First slide description here. Lorem ipsum dolor sit amet, consectetur adipiscing
+                                        elit.Third slide description here. Donec ac facilisis sapien, eget aliquam eros.
+                                        bakalım yazı uzun olursa bir sıkıntı çıkaracakmı Lorem ipsum dolor sit amet
+                                        consectetur, adipisicing elit. Corrupti, earum culpa hic neque delectus autem
+                                        quibusdam laborum accusamus ratione fuga sint obcaecati cupiditate dicta ipsam
+                                        voluptatibus officiis illum rem dolorum. adipisicing elit. Corrupti, earum culpa
+                                        hic neque delectus autem
+                                        quibusdam laborum accusamus ratione fuga sint obcaecati cupiditate dicta ipsam
+                                        voluptatibus officiis illum rem dolorum.</p>
+                                    <button class="btn btn-primary ccontact-btn">İletişime Geçin</button>
+                                </div>
+                                <div class="col-md-6 cvideo-content">
+                                    <iframe src="https://youtu.be/t86sKsR4pnk?si=rnekxLfXnbRinoK8" frameborder="0"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Second Slide -->
+                        <div class="carousel-item">
+                            <div class="row">
+                                <div class="col-md-6 cslide-content">
+                                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwVRR689h-rJJsTMJbY7w4zLP30xxYflNRy6HM164ZjtcJHhgL8su7kCJgBLqdJOx_2D4&usqp=CAU"
+                                        alt="Profile Image" class="cprofile-image">
+                                    <p>Second slide description here. Pellentesque habitant morbi tristique senectus et
+                                        netus.Third slide description here. Donec ac facilisis sapien, eget aliquam
+                                        eros.
+                                        bakalım yazı uzun olursa bir sıkıntı çıkaracakmı Lorem ipsum dolor sit amet
+                                        consectetur, adipisicing elit. Corrupti, earum culpa hic neque delectus autem
+                                        quibusdam laborum accusamus ratione fuga sint obcaecati cupiditate dicta ipsam
+                                        voluptatibus officiis illum rem dolorum. adipisicing elit. Corrupti, earum culpa
+                                        hic neque delectus autem
+                                        quibusdam laborum accusamus ratione fuga sint obcaecati cupiditate dicta ipsam
+                                        voluptatibus officiis illum rem dolorum.</p>
+                                    <button class="btn btn-primary ccontact-btn">İletişime Geçin</button>
+                                </div>
+                                <div class="col-md-6 cvideo-content">
+                                    <iframe src="https://youtu.be/t86sKsR4pnk?si=rnekxLfXnbRinoK8" frameborder="0"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Third Slide -->
+                        <div class="carousel-item">
+                            <div class="row">
+                                <div class="col-md-6 cslide-content">
+                                    <img src="https://buffer.com/library/content/images/2020/05/Ash-Read.png"
+                                        alt="Profile Image" class="cprofile-image">
+                                    <p>Third slide description here. Donec ac facilisis sapien, eget aliquam eros.
+                                        bakalım yazı uzun olursa bir sıkıntı çıkaracakmı Lorem ipsum dolor sit amet
+                                        consectetur, adipisicing elit. Corrupti, earum culpa hic neque delectus autem
+                                        quibusdam laborum accusamus ratione fuga sint obcaecati cupiditate dicta ipsam
+                                        voluptatibus officiis illum rem dolorum. adipisicing elit. Corrupti, earum culpa
+                                        hic neque delectus autem
+                                        quibusdam laborum accusamus ratione fuga sint obcaecati cupiditate dicta ipsam
+                                        voluptatibus officiis illum rem dolorum.
+                                    </p>
+                                    <button class="btn btn-primary ccontact-btn">İletişime Geçin</button>
+                                </div>
+                                <div class="col-md-6 cvideo-content">
+                                    <iframe src="https://youtu.be/C-eTdH2UPXI?si=3LpNZ1OYe3k6G_O9" frameborder="0"
+                                        allowfullscreen></iframe>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#customizedCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#customizedCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-lg-start bg-light text-muted">
+            <!-- Section: Social media -->
+            <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+                <!-- Left -->
+                <div class="me-5 d-none d-lg-block">
+                    <span>Get connected with us on social networks:</span>
+                </div>
+                <!-- Left -->
+
+                <!-- Right -->
+                <div>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="" class="me-4 text-reset">
+                        <i class="fab fa-github"></i>
+                    </a>
+                </div>
+                <!-- Right -->
+            </section>
+            <!-- Section: Social media -->
+
+            <!-- Section: Links  -->
+            <section class="">
+                <div class="container text-center text-md-start mt-5">
+                    <!-- Grid row -->
+                    <div class="row mt-3">
+                        <!-- Grid column -->
+                        <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                            <!-- Content -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                <i class="fas fa-gem me-3"></i>Company name
+                            </h6>
+                            <p>
+                                Here you can use rows and columns to organize your footer content. Lorem ipsum
+                                dolor sit amet, consectetur adipisicing elit.
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Products
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">HTML</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">CSS</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Bootstrap</a>
+                            </p>
+
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">
+                                Useful links
+                            </h6>
+                            <p>
+                                <a href="#!" class="text-reset">Pricing</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Settings</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Orders</a>
+                            </p>
+                            <p>
+                                <a href="#!" class="text-reset">Help</a>
+                            </p>
+                        </div>
+                        <!-- Grid column -->
+
+                        <!-- Grid column -->
+                        <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                            <!-- Links -->
+                            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                            <p><i class="fas fa-home me-3"></i> Hatay Erzin </p>
+                            <p>
+                                <i class="fas fa-envelope me-3"></i>
+                                ismail732yilmaz@gmail.com
+                            </p>
+                            <p><i class="fas fa-phone me-3"></i> +90 545 972 9550</p>
+                            <p><i class="fas fa-print me-3"></i> +90 545 972 9550</p>
+                        </div>
+                        <!-- Grid column -->
+                    </div>
+                    <!-- Grid row -->
+                </div>
+            </section>
+            <!-- Section: Links  -->
+
+            <!-- Copyright -->
+            <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+                © 2021 Copyright:
+                <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+            </div>
+            <!-- Copyright -->
+        </footer>
+        <!-- Footer -->
+
+
+
+        <!-- Bootstrap JS ve jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <script>
+            AOS.init();
+        </script>
+
+</body>
+
+</html>
